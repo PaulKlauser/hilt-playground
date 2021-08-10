@@ -1,5 +1,6 @@
 package com.example.flowplayground
 
+import com.example.flowplayground.list.ListFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -7,7 +8,7 @@ import javax.inject.Singleton
 @Component(modules = [ApiModule::class])
 interface AppComponent {
 
-    fun inject(mainActivity: MainActivity)
+    fun inject(listActivity: ListFragment)
 
     @Component.Factory
     interface Factory {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/flow_a"
+    app:startDestination="@id/firstFlowAFragment">
+
+    <fragment
+        android:id="@+id/firstFlowAFragment"
+        android:name="com.example.flowplayground.flowa.FirstFlowAFragment"
+        android:label="FirstFlowAFragment" >
+        <action
+            android:id="@+id/action_firstFlowAFragment_to_secondFlowAFragment"
+            app:destination="@id/secondFlowAFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/secondFlowAFragment"
+        android:name="com.example.flowplayground.flowa.SecondFlowAFragment"
+        android:label="SecondFlowAFragment" />
+</navigation>

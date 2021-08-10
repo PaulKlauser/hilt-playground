@@ -1,7 +1,6 @@
 package com.example.flowplayground
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -10,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainViewModel(
+class MainViewModel @Inject constructor(
     private val repository: TodoRepository
 ) : ViewModel() {
 
@@ -34,13 +33,13 @@ class MainViewModel(
             }
         }
     }
-
-    class Factory @Inject constructor(
-        private val repository: TodoRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return MainViewModel(repository) as T
-        }
-    }
+// TODO: PK - Don't need this if using Evan's lib
+//    class Factory @Inject constructor(
+//        private val repository: TodoRepository
+//    ) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//            return MainViewModel(repository) as T
+//        }
+//    }
 
 }
