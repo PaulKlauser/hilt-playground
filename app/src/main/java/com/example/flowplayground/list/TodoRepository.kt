@@ -1,5 +1,6 @@
-package com.example.flowplayground
+package com.example.flowplayground.list
 
+import com.example.flowplayground.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.updateAndGet

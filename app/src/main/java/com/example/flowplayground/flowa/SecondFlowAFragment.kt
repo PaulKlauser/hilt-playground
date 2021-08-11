@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.flowplayground.R
+import com.example.flowplayground.app
+import kotlinx.coroutines.flow.collect
 import me.tatarka.injectedvmprovider.viewModels
 import javax.inject.Inject
 import javax.inject.Provider
@@ -19,7 +23,12 @@ class SecondFlowAFragment : Fragment() {
 
     private val vm by viewModels { vmProvider.get() }
 
-    private val flowVm by navGraphViewModels<FlowAViewModel>(R.id.flow_a)
+    private val flowVm by navGraphViewModels<FlowAViewModel>(R.id.flow_a) {
+        FlowAViewModel.Factory(
+            app().appComponent,
+            findNavController().getBackStackEntry(R.id.flow_a)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +45,13 @@ class SecondFlowAFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<TextView>(R.id.text).text = vm.text
+        val textView = view.findViewById<TextView>(R.id.text)
+        lifecycleScope.launchWhenStarted {
+            vm.text.collect {
+                textView.text = it
+            }
+        }
+
     }
 
 }

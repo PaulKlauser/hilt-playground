@@ -1,7 +1,8 @@
-package com.example.flowplayground
+package com.example.flowplayground.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.flowplayground.Resource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
@@ -9,11 +10,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(
+class ListViewModel @Inject constructor(
     private val repository: TodoRepository
 ) : ViewModel() {
 
-    private val detailedTodos : MutableStateFlow<Resource<List<DetailedTodo>>> = MutableStateFlow(Resource.Empty)
+    private val detailedTodos : MutableStateFlow<Resource<List<DetailedTodo>>> = MutableStateFlow(
+        Resource.Empty
+    )
 
     fun getTodos(): Flow<Resource<List<DetailedTodo>>> {
         return detailedTodos

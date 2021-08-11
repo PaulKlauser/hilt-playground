@@ -1,4 +1,4 @@
-package com.example.flowplayground
+package com.example.flowplayground.list
 
 import retrofit2.http.GET
 import retrofit2.http.Path

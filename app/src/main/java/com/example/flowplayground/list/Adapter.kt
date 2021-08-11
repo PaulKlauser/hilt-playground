@@ -1,6 +1,7 @@
-package com.example.flowplayground
+package com.example.flowplayground.list
 
 import android.view.View
+import com.example.flowplayground.R
 import com.example.flowplayground.baseadapter.BaseAdapter
 import com.example.flowplayground.baseadapter.Entry
 import com.example.flowplayground.baseadapter.ViewHolderPresenter

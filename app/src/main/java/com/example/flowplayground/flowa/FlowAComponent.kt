@@ -1,9 +1,9 @@
 package com.example.flowplayground.flowa
 
 import com.example.flowplayground.FlowScope
-import dagger.Component
+import dagger.Subcomponent
 
-@Component
+@Subcomponent
 @FlowScope
 interface FlowAComponent {
 
@@ -11,9 +11,11 @@ interface FlowAComponent {
 
     fun inject(secondFlowAFragment: SecondFlowAFragment)
 
-//    @Component.Factory
-//    interface Factory {
-//        fun create(): FlowAComponent
-//    }
+    fun flowRepository(): FlowARepository
+
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(): FlowAComponent
+    }
 
 }

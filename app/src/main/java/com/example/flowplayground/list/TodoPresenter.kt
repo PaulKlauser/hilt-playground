@@ -1,7 +1,8 @@
-package com.example.flowplayground
+package com.example.flowplayground.list
 
 import android.view.View
 import android.widget.TextView
+import com.example.flowplayground.R
 import com.example.flowplayground.baseadapter.ViewHolderPresenter
 
 class TodoPresenter(view: View) : ViewHolderPresenter<DetailedTodo> {

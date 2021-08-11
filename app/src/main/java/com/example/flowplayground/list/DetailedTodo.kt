@@ -1,4 +1,4 @@
-package com.example.flowplayground
+package com.example.flowplayground.list
 
 import com.squareup.moshi.JsonClass
 

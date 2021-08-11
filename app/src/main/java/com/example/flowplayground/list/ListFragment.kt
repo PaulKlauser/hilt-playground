@@ -16,7 +16,7 @@ import javax.inject.Provider
 class ListFragment : Fragment() {
 
     @Inject
-    lateinit var viewModelProvider: Provider<MainViewModel>
+    lateinit var viewModelProvider: Provider<ListViewModel>
 
     private val vm by viewModels { viewModelProvider.get() }
 

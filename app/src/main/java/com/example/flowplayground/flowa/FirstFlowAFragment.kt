@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.flowplayground.R
+import com.example.flowplayground.app
 import me.tatarka.injectedvmprovider.viewModels
 import javax.inject.Inject
 import javax.inject.Provider
@@ -22,7 +23,12 @@ class FirstFlowAFragment : Fragment() {
 
     private val vm by viewModels { vmProvider.get() }
 
-    private val flowVm by navGraphViewModels<FlowAViewModel>(R.id.flow_a)
+    private val flowVm by navGraphViewModels<FlowAViewModel>(R.id.flow_a) {
+        FlowAViewModel.Factory(
+            app().appComponent,
+            findNavController().getBackStackEntry(R.id.flow_a)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +48,7 @@ class FirstFlowAFragment : Fragment() {
             findNavController().navigate(FirstFlowAFragmentDirections.actionFirstFlowAFragmentToSecondFlowAFragment())
         }
         view.findViewById<EditText>(R.id.edit_text).addTextChangedListener {
-            vm.text = it.toString()
+            vm.setText(it.toString())
         }
     }
 
