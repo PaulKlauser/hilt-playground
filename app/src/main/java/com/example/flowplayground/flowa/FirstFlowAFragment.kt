@@ -8,26 +8,23 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.flowplayground.R
-import com.example.flowplayground.app
-import me.tatarka.injectedvmprovider.viewModels
+import com.example.flowplayground.util.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import javax.inject.Provider
 
+@AndroidEntryPoint
 class FirstFlowAFragment : Fragment() {
 
     @Inject
-    lateinit var vmProvider: Provider<FirstFlowAViewModel>
+    lateinit var vmFactory: FirstFlowAViewModel.Factory
 
-    private val vm by viewModels { vmProvider.get() }
+    private val flowVm by hiltNavGraphViewModels<FlowAViewModel>(R.id.flow_a)
 
-    private val flowVm by navGraphViewModels<FlowAViewModel>(R.id.flow_a) {
-        FlowAViewModel.Factory(
-            app().appComponent,
-            findNavController().getBackStackEntry(R.id.flow_a)
-        )
+    private val vm: FirstFlowAViewModel by viewModels {
+        vmFactory.create(flowVm.flowARepository)
     }
 
     override fun onCreateView(
@@ -36,11 +33,6 @@ class FirstFlowAFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.flow_a_first, container, false)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        flowVm.flowAComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

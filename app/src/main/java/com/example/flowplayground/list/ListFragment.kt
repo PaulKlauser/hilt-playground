@@ -5,21 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flowplayground.R
-import com.example.flowplayground.app
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import me.tatarka.injectedvmprovider.viewModels
-import javax.inject.Inject
-import javax.inject.Provider
 
+@AndroidEntryPoint
 class ListFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelProvider: Provider<ListViewModel>
-
-    private val vm by viewModels { viewModelProvider.get() }
+    private val vm: ListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,11 +23,6 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.list_fragment, container, false)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        app().appComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

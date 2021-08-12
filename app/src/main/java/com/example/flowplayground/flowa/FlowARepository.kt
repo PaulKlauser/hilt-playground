@@ -1,14 +1,14 @@
 package com.example.flowplayground.flowa
 
 import android.os.Parcelable
-import com.example.flowplayground.FlowScope
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-@FlowScope
+@ViewModelScoped
 class FlowARepository @Inject constructor() {
 
     private val _text = MutableStateFlow("")

@@ -6,27 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.flowplayground.R
-import com.example.flowplayground.app
+import com.example.flowplayground.util.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import me.tatarka.injectedvmprovider.viewModels
 import javax.inject.Inject
-import javax.inject.Provider
 
+@AndroidEntryPoint
 class SecondFlowAFragment : Fragment() {
 
     @Inject
-    lateinit var vmProvider: Provider<SecondFlowAViewModel>
+    lateinit var vmFactory: SecondFlowAViewModel.Factory
 
-    private val vm by viewModels { vmProvider.get() }
+    private val flowVm by hiltNavGraphViewModels<FlowAViewModel>(R.id.flow_a)
 
-    private val flowVm by navGraphViewModels<FlowAViewModel>(R.id.flow_a) {
-        FlowAViewModel.Factory(
-            app().appComponent,
-            findNavController().getBackStackEntry(R.id.flow_a)
+    private val vm: SecondFlowAViewModel by viewModels {
+        vmFactory.create(
+            flowVm.flowARepository
         )
     }
 
@@ -36,11 +34,6 @@ class SecondFlowAFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.flow_a_second, container, false)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        flowVm.flowAComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

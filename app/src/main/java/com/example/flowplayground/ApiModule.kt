@@ -3,12 +3,15 @@ package com.example.flowplayground
 import com.example.flowplayground.list.PlaceHolderService
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 @Module
+@InstallIn(SingletonComponent::class)
 class ApiModule {
 
     @Provides
