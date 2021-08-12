@@ -8,21 +8,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-@ViewModelScoped
-class FlowARepository @Inject constructor() {
+const val FLOW_REPO_STATE_KEY = "flow_state"
 
-    private val _text = MutableStateFlow("")
+// Don't need these annotations because of the @Provides in FlowAModule
+// Is keeping these here informative or misleading?
+@ViewModelScoped
+class FlowARepository @Inject constructor(
+    initialState: State?
+) {
+
+    private val _text = MutableStateFlow(initialState?.text.orEmpty())
     val text: Flow<String> = _text
 
     fun setText(text: String) {
         _text.value = text
-    }
-
-    fun setState(state: State?) {
-        if (state == null) {
-            return
-        }
-        _text.value = state.text
     }
 
     fun state(): Flow<State> {

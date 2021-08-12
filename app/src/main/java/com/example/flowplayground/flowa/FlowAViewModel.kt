@@ -8,8 +8,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val STATE_KEY = "state"
-
 @HiltViewModel
 class FlowAViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -17,10 +15,9 @@ class FlowAViewModel @Inject constructor(
 ) : ViewModel() {
 
     init {
-        flowARepository.setState(savedStateHandle[STATE_KEY])
         viewModelScope.launch {
              flowARepository.state().collect {
-                savedStateHandle[STATE_KEY] = it
+                savedStateHandle[FLOW_REPO_STATE_KEY] = it
             }
         }
     }
