@@ -28,7 +28,11 @@ class TodoRepository @Inject constructor(
     }
 
     suspend fun fetchTodo(id: Int): Resource<DetailedTodo> {
-        return Resource.Success(service.getTodo(id))
+        return try {
+            Resource.Success(service.getTodo(id))
+        } catch (e: Exception) {
+            Resource.Error(e, null)
+        }
     }
 
 }

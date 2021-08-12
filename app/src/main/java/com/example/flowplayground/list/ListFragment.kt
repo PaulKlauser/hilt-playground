@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flowplayground.*
+import com.example.flowplayground.R
+import com.example.flowplayground.app
 import kotlinx.coroutines.flow.collect
 import me.tatarka.injectedvmprovider.viewModels
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.list_activity, container, false)
+        return inflater.inflate(R.layout.list_fragment, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,16 +37,40 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recycler = view.findViewById<RecyclerView>(R.id.recycler)
+        val loading = view.findViewById<View>(R.id.loading)
+        val error = view.findViewById<View>(R.id.error)
         val adapter = Adapter()
         recycler.adapter = adapter
 
         lifecycleScope.launchWhenStarted {
-            vm.getTodos().collect {
-                if (it is Resource.Success) {
-                    adapter.bind(it.newData)
+            vm.detailedTodos.collect {
+                if (it == null) {
+                    return@collect
+                }
+                adapter.bind(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            vm.isLoading.collect {
+                if (it) {
+                    loading.visibility = View.VISIBLE
+                } else {
+                    loading.visibility = View.GONE
                 }
             }
         }
+
+        lifecycleScope.launchWhenStarted {
+            vm.error.collect {
+                if (it) {
+                    error.visibility = View.VISIBLE
+                } else {
+                    error.visibility = View.GONE
+                }
+            }
+        }
+
         vm.fetchTodos()
     }
 }

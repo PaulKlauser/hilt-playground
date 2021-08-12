@@ -14,24 +14,43 @@ class ListViewModel @Inject constructor(
     private val repository: TodoRepository
 ) : ViewModel() {
 
-    private val detailedTodos : MutableStateFlow<Resource<List<DetailedTodo>>> = MutableStateFlow(
-        Resource.Empty
+    private val _detailedTodos: MutableStateFlow<List<DetailedTodo>?> = MutableStateFlow(
+        null
     )
-
-    fun getTodos(): Flow<Resource<List<DetailedTodo>>> {
-        return detailedTodos
-    }
+    val detailedTodos: Flow<List<DetailedTodo>?> = _detailedTodos
+    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading: Flow<Boolean> = _isLoading
+    private val _error = MutableStateFlow(false)
+    val error: Flow<Boolean> = _error
 
     /**
      * Example of composing multiple one-shot calls using suspend funs
      */
     fun fetchTodos() {
         viewModelScope.launch {
+            _isLoading.value = true
             repository.fetchTodos().let { ids ->
                 if (ids is Resource.Success) {
-                    detailedTodos.value = Resource.Success(ids.newData.map {
-                        async { repository.fetchTodo(it.id).data }
-                    }.awaitAll().filterNotNull())
+                    _detailedTodos.value = ids.newData.map { loadedId ->
+                        async {
+                            when (val detailedTodo = repository.fetchTodo(loadedId.id)) {
+                                is Resource.Success -> {
+                                    detailedTodo.data
+                                }
+                                is Resource.Error -> {
+                                    _error.value = true
+                                    null
+                                }
+                                else -> {
+                                    null
+                                }
+                            }
+                        }
+                    }.awaitAll()
+                        .filterNotNull()
+                    _isLoading.value = false
+                } else if (ids is Resource.Error) {
+                    _error.value = true
                 }
             }
         }
